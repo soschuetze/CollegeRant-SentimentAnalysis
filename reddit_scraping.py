@@ -45,5 +45,5 @@ def get_posts(old_df):
 
 # Entry point of the script
 if __name__ == "__main__":
-    existing_df = pd.read_csv('submissions.csv')
+    existing_df = pd.read_csv('submissions.csv', index_col=0)
     get_posts(existing_df)

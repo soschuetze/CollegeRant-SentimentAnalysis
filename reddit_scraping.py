@@ -3,12 +3,12 @@ import pandas as pd
 
 # Initialize PRAW with your credentials
 reddit = praw.Reddit(
-    client_id='#######',
-    client_secret='########',
+    client_id='oINMc4behxDmx9qWm__9-w',
+    client_secret='YJIDQn_oWB1o6cwHDPuz4YX2tkKjqA',
     user_agent='collegerant-sentanalysis'
 )
 
-def get_posts():
+def get_posts(old_df):
     '''
     Obtains submissions and outputs to csv file
 
@@ -31,10 +31,19 @@ def get_posts():
         })
 
     # Create a DataFrame
-    df = pd.DataFrame(submission_data)
+    new_df = pd.DataFrame(submission_data)
+
+    new_posts = new_df[~new_df['Title'].isin(old_df['Title'])]
+            
+    # If there are new posts, append them to the existing DataFrame
+    if not new_posts.empty:
+        df = pd.concat([old_df, new_posts])
+    else:
+        df = old_df
 
     df.to_csv("submissions.csv")
 
 # Entry point of the script
 if __name__ == "__main__":
-    get_posts()
+    existing_df = pd.read_csv('submissions.csv')
+    get_posts(existing_df)
